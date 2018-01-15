@@ -1,0 +1,43 @@
+# DO NOT FORGET TO SET THE ENVIRONMENT VARIABLES
+#
+
+version: '3'
+
+services:
+   nginx:
+     image: nginx:latest
+     ports:
+        - '80:80'
+     volumes:
+        - ./nginx:/etc/nginx/conf.d
+        - ./logs/nginx:/var/log/nginx
+        - ./wordpress:/var/www/html
+     depends_on:
+        - wordpress
+     restart: always     
+
+   mysql:
+     image: mariadb
+     ports:
+       - '3306:3306'
+     volumes:
+       - ./db-data:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+   wordpress:
+     depends_on:
+       - mysql
+     image: wordpress:fpm
+     ports:
+       - '9000:9000'
+     volumes:
+       - ./wordpress:/var/www/html 
+       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini 
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: mysql:3306
+       WORDPRESS_DB_NAME: wpdb
+       WORDPRESS_TABLE_PREFIX: wp_
+       WORDPRESS_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
