@@ -1,19 +1,21 @@
 ##############################################################
-# DO NOT FORGET TO SET THE ENVIRONMENT VARIABLES IN YOUR SHELL
+# DO NOT FORGET TO SET THE ENVIRONMENT VARIABLES IN THE FILE
+#            variables.env
 #
 
+# we are using Compose file format version 3
 version: '3'
 
+# we want to start the following 
 services:
-
    mysql:
-     image: mariadb
+     image: mariadb               # use mariadb image
      ports:
-       - '3306:3306'
+       - '3306:3306'              # map port 3306 of container to 3306 of host
      volumes:
-       - ./db-data:/var/lib/mysql
-     restart: always
-     environment:
+       - ./db-data:/var/lib/mysql # mount host directory '/db-data' on '/var/lib/mysql' of container
+     restart: always              # always restart the services when it stops
+     environment:                 # make environment variables in container available
        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
    wordpress:
