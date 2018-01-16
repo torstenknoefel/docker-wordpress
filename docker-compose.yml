@@ -8,7 +8,7 @@ version: '3'
 
 # we want to start the following 
 services:
-   mysql:
+   mariadb:
      image: mariadb               # use mariadb image
      ports:
        - '3306:3306'              # map port 3306 of container to 3306 of host
@@ -20,7 +20,7 @@ services:
 
    wordpress:
      depends_on:
-       - mysql
+       - mariadb
      image: wordpress:fpm
      ports:
        - '9000:9000'
@@ -29,7 +29,7 @@ services:
        - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini 
      restart: always
      environment:
-       WORDPRESS_DB_HOST: mysql:3306
+       WORDPRESS_DB_HOST: mariadb:3306
        WORDPRESS_DB_NAME: wpdb
        WORDPRESS_TABLE_PREFIX: wp_
        WORDPRESS_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
