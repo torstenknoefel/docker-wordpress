@@ -1,20 +1,10 @@
-# DO NOT FORGET TO SET THE ENVIRONMENT VARIABLES
+##############################################################
+# DO NOT FORGET TO SET THE ENVIRONMENT VARIABLES IN YOUR SHELL
 #
 
 version: '3'
 
 services:
-   nginx:
-     image: nginx:latest
-     ports:
-        - '80:80'
-     volumes:
-        - ./nginx:/etc/nginx/conf.d
-        - ./logs/nginx:/var/log/nginx
-        - ./wordpress:/var/www/html
-     depends_on:
-        - wordpress
-     restart: always     
 
    mysql:
      image: mariadb
@@ -41,3 +31,16 @@ services:
        WORDPRESS_DB_NAME: wpdb
        WORDPRESS_TABLE_PREFIX: wp_
        WORDPRESS_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+   nginx:
+     image: nginx:latest
+     ports:
+        - '80:80'
+     volumes:
+        - ./nginx:/etc/nginx/conf.d
+        - ./logs/nginx:/var/log/nginx
+        - ./wordpress:/var/www/html
+     depends_on:
+        - wordpress
+     restart: always     
+
