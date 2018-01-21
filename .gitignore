@@ -1,2 +1,2 @@
 # Ignore env variable file as it contains credentials
-variables.env
+.env
