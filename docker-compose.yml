@@ -1,6 +1,6 @@
 ##############################################################
 # DO NOT FORGET TO SET THE ENVIRONMENT VARIABLES IN THE FILE
-#            variables.env
+#            .env
 #
 
 # we are using Compose file format version 3
