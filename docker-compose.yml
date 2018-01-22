@@ -1,6 +1,7 @@
 ##############################################################
 # DO NOT FORGET TO SET THE ENVIRONMENT VARIABLES IN THE FILE
 #            .env
+# which is automatically sourced when starting a container
 #
 
 # we are using Compose file format version 3
@@ -11,24 +12,34 @@ services:
    mariadb:
      image: mariadb               # use mariadb image
      ports:
-       - '3306:3306'              # map port 3306 of container to 3306 of host
+       - '3306:3306'              # map port 3306 of container 
+                                  # to 3306 of host
      volumes:
-       - ./db-data:/var/lib/mysql # mount host directory '/db-data' on '/var/lib/mysql' of container
-     restart: always              # always restart the services when it stops
-     environment:                 # make environment variables in container available
+       - ./db-data:/var/lib/mysql # mount host directory './db-data' 
+                                  # on '/var/lib/mysql' of container
+                                  # to make db persistent
+ 
+     restart: always              # always restart the services
+                                  # when it stops
+ 
+     environment:                 # map environment variables 
+                                  # in container
        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
    wordpress:
-     depends_on:
-       - mariadb
-     image: wordpress:fpm
-     ports:
-       - '9000:9000'
+     depends_on:                  # WordPress depends on
+       - mariadb                  # MariaDB container running
+     image: wordpress:fpm         # use wordpress imsge 
+                                  # with fpm feature
+     ports:                       
+       - '9000:9000'              # map port 9000 of container
+                                  # to 9000 of host
      volumes:
-       - ./wordpress:/var/www/html 
+       - ./wordpress:/var/www/html # wordpress content root
+                                  # php config for larger uploads
        - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini 
      restart: always
-     environment:
+     environment:                  
        WORDPRESS_DB_HOST: mariadb:3306
        WORDPRESS_DB_NAME: wpdb
        WORDPRESS_TABLE_PREFIX: wp_
